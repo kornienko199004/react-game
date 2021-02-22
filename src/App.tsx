@@ -1,12 +1,16 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Container from './layouts/components/Container/Container';
+import { BrowserRouter as Router, Switch } from 'react-router-dom';
 
-function App() {
+function App(match: any) {
   return (
     <div className="App">
-      <Container />
+      <Router>
+        <Switch>
+          <Container />
+        </Switch>
+      </Router>
     </div>
   );
 }
