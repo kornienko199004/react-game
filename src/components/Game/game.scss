@@ -1,9 +1,41 @@
+.game {
+  position: relative;
+  height: 100%;
+}
+
 .game-field {
-  width: 50%;
+  position: absolute;
+  top: 50%;
+  width: 100%;
   margin: 0 auto;
-  display: flex;
+  // display: flex;
+  // flex-wrap: wrap;
+  display: grid;
+  justify-content: center;
 }
 
 .game-field__item {
   margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+.game-field {
+
+  &_small {
+    grid-column: 3;
+    grid-row: 2;
+  }
+
+  &_large {
+    margin-top: -210px;
+    grid-template-rows: repeat(3, 140px);
+    grid-template-columns: repeat(8, 100px);
+    grid-gap: 10px;
+  }
+}
+
+.statistics {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }

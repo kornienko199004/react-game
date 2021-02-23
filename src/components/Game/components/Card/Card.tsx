@@ -29,10 +29,10 @@ const cardsMap = {
   [Cards.card12]: card12,
 }
 
-export default function Card(props: { cardClick(): void, isFlipped: boolean, imgName: Cards }) {
-  const { cardClick, isFlipped, imgName } = props;
+export default function Card(props: { cardClick(): void, isFlipped: boolean, imgName: Cards, found: boolean }) {
+  const { cardClick, isFlipped, imgName, found } = props;
   return (
-    <div className="card-wrapper" onClick={cardClick}>
+    <div className={`card-wrapper ${found ? 'card-wrapper_hide' : ''}`} onClick={cardClick}>
       <div className={"card" + (isFlipped ? " flipped" : "")}>
         <div className="card__back"></div>
         <div className="card__front">

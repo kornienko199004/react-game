@@ -4,6 +4,7 @@ import Container from './layouts/components/Container/Container';
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
 
 function App(match: any) {
+  console.log(match);
   return (
     <div className="App">
       <Router>
