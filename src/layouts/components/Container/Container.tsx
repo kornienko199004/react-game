@@ -13,22 +13,24 @@ import Game from '../../../components/Game/Game';
 import Autoplay from '../../../components/Autoplay/Autoplay';
 import Settings from '../../../components/Settings/Settings';
 import Statistics from '../../../components/Statistics/Statistics';
+import Footer from '../../../components/Footer/Footer';
+import Header from '../../../components/Header/Header';
 
-const useStyles = makeStyles({
-  list: {
-    width: 280,
-  },
-  fullList: {
-    width: 'auto',
-  },
-});
+// const useStyles = makeStyles({
+//   list: {
+//     width: 280,
+//   },
+//   fullList: {
+//     width: 'auto',
+//   },
+// });
 
-type Anchor = 'top' | 'left' | 'bottom' | 'right';
+// type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
 const routes: IRouterItem[] = [
   {
     button: 'New Game',
-    path: '/',
+    path: '/game',
   },
   {
     button: 'Autoplay',
@@ -45,62 +47,70 @@ const routes: IRouterItem[] = [
 ];
 
 export default function Container() {
-  const classes = useStyles();
-  const [state, setState] = React.useState({
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
-  });
+  // const classes = useStyles();
+  // const [state, setState] = React.useState({
+  //   top: false,
+  //   left: false,
+  //   bottom: false,
+  //   right: false,
+  // });
 
-  const toggleDrawer = (anchor: Anchor, open: boolean) => (
-    event: React.KeyboardEvent | React.MouseEvent,
-  ) => {
-    if (
-      event &&
-      event.type === 'keydown' &&
-      ((event as React.KeyboardEvent).key === 'Tab' ||
-        (event as React.KeyboardEvent).key === 'Shift')
-    ) {
-      return;
-    }
+  // const toggleDrawer = (anchor: Anchor, open: boolean) => (
+  //   event: React.KeyboardEvent | React.MouseEvent,
+  // ) => {
+  //   if (
+  //     event &&
+  //     event.type === 'keydown' &&
+  //     ((event as React.KeyboardEvent).key === 'Tab' ||
+  //       (event as React.KeyboardEvent).key === 'Shift')
+  //   ) {
+  //     return;
+  //   }
 
-    setState({ ...state, [anchor]: open });
-  };
+  //   setState({ ...state, [anchor]: open });
+  // };
 
-  const list = (anchor: Anchor) => (
-    <div
-      className={clsx(classes.list, 'sidebar')}
-      role="presentation"
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
+  // const list = (anchor: Anchor) => (
+  //   <div
+  //     className={clsx(classes.list, 'sidebar')}
+  //     role="presentation"
+  //     onKeyDown={toggleDrawer(anchor, false)}
+  //   >
 
-    <header className="sidebar__header">
-      <div className="logo sidebar__logo">
-        <p className="logo__title">Memory Game</p>
-        <p className="logo__description">train your memory</p>
-      </div>
+  //   <header className="sidebar__header">
+  //     <div className="logo sidebar__logo">
+  //       <p className="logo__title">Memory Game</p>
+  //       <p className="logo__description">train your memory</p>
+  //     </div>
 
-      <button onClick={toggleDrawer(anchor, false)}>X</button>
-    </header>
-      <List>
-        {routes.map(({ button, path }) => (
-          <ListItem button key={button} className="navigation__item">
-            <Link className="navigation__link" to={path}>{button}</Link>
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  );
+  //     <button onClick={toggleDrawer(anchor, false)}>X</button>
+  //   </header>
+  //     <List>
+  //       {routes.map(({ button, path }) => (
+  //         <ListItem button key={button} className="navigation__item">
+  //           <Link className="navigation__link" to={path}>{button}</Link>
+  //         </ListItem>
+  //       ))}
+  //     </List>
+  //   </div>
+  // );
 
   return (
     <div className="wrapper">
-      <div className="header">
+      <Header>
+          <button>
+            <Link to="/">pause</Link>
+          </button>
+      </Header>
+      {/* <div className="header">
         <div className="header__inner">
           <div className="logo">
             <p className="logo__title">Memory Game</p>
             <p className="logo__description">train your memory</p>
           </div>
+            <button>
+              <Link to="/">pause</Link>
+            </button>
           <React.Fragment key={'right'}>
             <button className="menu-button" onClick={toggleDrawer('right', true)}>
               <DehazeIcon />
@@ -115,11 +125,28 @@ export default function Container() {
             </SwipeableDrawer>
           </React.Fragment>
         </div>
-      </div>
+      </div> */}
       <div className="page">
         <Switch>
           <Route exact path="/">
-            <Game />
+            <h1>Menu</h1>
+            {routes.map(({ button, path }) => (
+              <div key={button}>
+                <Link to={path}>{button}</Link>
+              </div>
+            ))}
+          </Route>
+          
+    {/* const { width = 6, height = 4 } = props;
+    const size: number = width * height;
+    this.state = {
+      size: size,
+      cards: generateCards(size),
+      firstCard: null,
+      secondCard: null,
+    }; */}
+          <Route exact path="/game">
+            {/* <Game size={width * height} cards={} firstCard={null} secondCard={null} /> */}
           </Route>
           <Route exact path="/autoplay">
             <Autoplay />
@@ -132,7 +159,8 @@ export default function Container() {
           </Route>
         </Switch>
       </div>
-      <div className="footer">
+      <Footer logo={rsschool} />
+      {/* <div className="footer">
         <div className="footer__inner">
           <p className="feedback">
             Made by <a href="https://github.com/kornienko199004" rel="noreferrer" target="_blank">kornienko199004</a> for
@@ -143,7 +171,7 @@ export default function Container() {
             </a>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
