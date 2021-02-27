@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import Container from './layouts/components/Container/Container';
+import Main from './layouts/components/Main/Main';
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
 
 function App(match: any) {
@@ -9,7 +9,7 @@ function App(match: any) {
     <div className="App">
       <Router>
         <Switch>
-          <Container />
+          <Main />
         </Switch>
       </Router>
     </div>

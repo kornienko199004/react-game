@@ -17,3 +17,29 @@ export enum Cards {
   'card11' = 'card11',
   'card12' = 'card12',
 }
+
+export interface ICard {
+  image: Cards,
+  isFlipped: boolean,
+  id: string,
+  found: boolean;
+}
+
+export const routes: IRouterItem[] = [
+  {
+    button: 'New Game',
+    path: '/game',
+  },
+  {
+    button: 'Autoplay',
+    path: '/autoplay',
+  },
+  {
+    button: 'Settings',
+    path: '/settings',
+  },
+  {
+    button: 'Statistics',
+    path: 'statistics',
+  },
+];

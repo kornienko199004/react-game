@@ -1,86 +1,43 @@
 import React from 'react';
 import shortid from 'shortid';
 import { TypeOfTag } from 'typescript';
-import { Cards } from '../../common/models/models';
+import { generateCards } from '../../common/helpers/game.helper';
+import { Cards, ICard } from '../../common/models/models';
 import Card from './components/Card/Card';
 import './game.scss';
 
-interface ICard {
-  image: Cards,
-  isFlipped: boolean,
-  id: string,
-  found: boolean;
-}
-
-const cards: Cards[] = [
-  Cards.card1,
-  Cards.card2,
-  Cards.card3,
-  Cards.card4,
-  Cards.card5,
-  Cards.card6,
-  Cards.card7,
-  Cards.card8,
-  Cards.card9,
-  Cards.card10,
-  Cards.card11,
-  Cards.card12,
-];
-
-const generateUniqCards = (count: number): ICard[] => {
-  const cardsCopy: Cards[] = [...cards];
-  let mixedCards: ICard[] = [];
-
-  for (let i = 0; i < count; i += 1) {
-    const cardToInsert: number = Math.floor(Math.random() * cardsCopy.length);
-    mixedCards = [...mixedCards,
-      {
-        image: cardsCopy.splice(cardToInsert, 1)[0],
-        isFlipped: true,
-        id: '',
-        found: false,
-      }
-    ];
-  }
-  return mixedCards;
-};
-
-const generateCards = (size: number): ICard[] => {
-  const count = size / 2;
-
-  const uniqCards: ICard[] = generateUniqCards(count);
-
-  let tempCards: ICard[] = [...uniqCards, ...uniqCards];
-  let mixedCards: ICard[] = [];
-
-  for (let i = 0; i < size; i += 1) {
-    const cardToInsert: number = Math.floor(Math.random() * tempCards.length);
-    mixedCards = [...mixedCards, tempCards.splice(cardToInsert, 1)[0]];
-  }
-
-  mixedCards = mixedCards.map((card) => ({ ...card, id: shortid() }));
-  return mixedCards;
-};
-
 interface IState {
-  cards: ICard[],
-  size: number,
-  firstCard: ICard | null,
-  secondCard: ICard | null,
+  cards: ICard[];
+  size: number;
+  firstCard: ICard | null;
+  secondCard: ICard | null;
+  isResumed: boolean;
 }
 
-export default class Game extends React.Component {
+interface IProps {
+  width: number;
+  height: number;
+  cards: ICard[];
+  firstCard: ICard | null;
+  secondCard: ICard | null;
+  paused(cards: ICard[]): void;
+  isResumed: boolean;
+}
+
+export default class Game extends React.Component<IProps> {
   state: IState;
 
-  constructor(props: { width: number; height: number }) {
+  constructor(props: IProps) {
     super(props);
-    const { width = 6, height = 4 } = props;
+    const { width = 6, height = 4, cards, firstCard, secondCard, isResumed } = props;
+    console.log('cards', cards);
     const size: number = width * height;
     this.state = {
-      size: size,
-      cards: generateCards(size),
-      firstCard: null,
-      secondCard: null,
+      size,
+      cards,
+      firstCard,
+      secondCard,
+      isResumed,
     };
   }
 
@@ -102,7 +59,6 @@ export default class Game extends React.Component {
       if (!prevState.secondCard && changedCard.isFlipped) {
         let successGuess: boolean = false;
         if (prevState.firstCard && prevState.firstCard.image === changedCard.image) {
-          console.log(true);
           successGuess = true;
         }
         cardsCopy = cardsCopy.map((card) => {
@@ -154,6 +110,7 @@ export default class Game extends React.Component {
   }
 
   componentDidMount() {
+    console.log('component Did Mount');
     setTimeout(() => {
       const flippedCards: ICard[] = this.state.cards.map((card) => ({ ...card, isFlipped: false }));
       this.setState({
@@ -163,10 +120,24 @@ export default class Game extends React.Component {
     }, 5000);
   }
 
+  animationCheck = (currentCard: ICard): boolean => {
+    const { firstCard, secondCard } = this.state;
+    if (firstCard && secondCard) {
+      if (firstCard.image === secondCard.image && firstCard.image === currentCard.image) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   render() {
       const { cards } = this.state;
+
       return (
         <div className="game">
+          <button onClick={() => this.props.paused(this.state.cards)}>
+            Pause
+          </button>
           <div className="statistics">
             <p>Score:</p>
             <p>Time:</p>
@@ -179,6 +150,7 @@ export default class Game extends React.Component {
                   isFlipped={card.isFlipped}
                   imgName={card.image}
                   found={card.found}
+                  animationOn={ this.animationCheck(card) }
                 />
               </div>
             ))}

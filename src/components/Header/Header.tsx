@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Header(props: { children: any }) {
+export default function Header(props: { children?: any }) {
   return (
 
     <div className="header">

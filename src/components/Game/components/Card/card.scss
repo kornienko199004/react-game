@@ -31,8 +31,13 @@
 }
 
 .card-wrapper_hide {
-  animation: hiding 1s, bounce 300ms infinite;
+  animation: hiding 1s linear, bounce 300ms infinite 300ms normal;
   opacity: 0;
+  cursor: default;
+}
+
+.card-wrapper_display_none {
+  display: none;
 }
 
 .card {
