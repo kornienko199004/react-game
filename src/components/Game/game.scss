@@ -4,7 +4,7 @@
 }
 
 .game-field {
-  position: absolute;
+  // position: absolute;
   top: 50%;
   width: 100%;
   margin: 0 auto;
@@ -20,25 +20,51 @@
 }
 
 .game-field {
+  --cardWidth: 140px;
+  --cardHeight: 100px;
+  --smallRows: 2;
+  --smallColumns: 6;
+  --mediumRows: 3;
+  --mediumColumns: 6;
+  --largeRows: 3;
+  --largeColumns: 8;
+  --marginTop: -210px;
+
+  @media (max-width: 1023px) {
+    --cardWidth: 80px;
+    --cardHeight: 80px;
+  }
+
+  @media (max-width: 800px) {
+    --cardWidth: 60px;
+    --cardHeight: 60px;
+    --smallRows: 6;
+    --smallColumns: 2;
+    --mediumRows: 6;
+    --mediumColumns: 3;
+    --largeRows: 6;
+    --largeColumns: 4;
+    --marginTop: -200px;
+  }
 
   &_small {
-    margin-top: -210px;
-    grid-template-rows: repeat(2, 140px);
-    grid-template-columns: repeat(6, 100px);
+    // margin-top: var(--marginTop);
+    grid-template-rows: repeat(var(--smallRows), var(--cardWidth));
+    grid-template-columns: repeat(var(--smallColumns), var(--cardHeight));
     grid-gap: 10px;
   }
 
   &_medium {
-    margin-top: -210px;
-    grid-template-rows: repeat(3, 140px);
-    grid-template-columns: repeat(6, 100px);
+    // margin-top: var(--marginTop);
+    grid-template-rows: repeat(var(--mediumRows), var(--cardWidth));
+    grid-template-columns: repeat(var(--mediumColumns), var(--cardHeight));
     grid-gap: 10px;
   }
 
   &_large {
-    margin-top: -210px;
-    grid-template-rows: repeat(3, 140px);
-    grid-template-columns: repeat(8, 100px);
+    // margin-top: var(--marginTop);
+    grid-template-rows: repeat(var(--largeRows), var(--cardWidth));
+    grid-template-columns: repeat(var(--largeColumns), var(--cardHeight));
     grid-gap: 10px;
   }
 }

@@ -80,3 +80,27 @@
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
+
+@media (max-width: 1023px) {
+  .card {
+    width: 80px;
+    height: 80px;
+  }
+
+  .card__image {
+    width: 80px;
+    height: auto;
+  }
+}
+
+@media (max-width: 800px) {
+  .card {
+    width: 60px;
+    height: 60px;
+  }
+
+  .card__image {
+    width: 60px;
+    height: auto;
+  }
+}
