@@ -43,3 +43,10 @@ export const routes: IRouterItem[] = [
     path: 'statistics',
   },
 ];
+
+export interface ISettings {
+  width: number;
+  height: number;
+  delay: number;
+  theme: string;
+}

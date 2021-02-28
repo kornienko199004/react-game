@@ -34,7 +34,6 @@
 }
 
 .footer__inner {
-  // max-width: 1024px;
   width: 100%;
   height: 57px;
   margin: 0 auto;
@@ -137,6 +136,41 @@
   align-items: flex-start;
 }
 
-.page {
+.wrapper_theme_dark {
+  
+  & .header,
+    .footer {
+    background-color: #161b22;
+  }
 
+  & .page {
+    background-color: #0d1117;
+    color: #fff;
+  }
+
+  & .feedback {
+    color: #3c424a;
+  }
+
+  & .settings__controls {
+
+    & button {
+      color: #c9d1d9;
+      background-color: #21262d;
+    }
+  }
+
+  & .settings__form-control {
+    & label {
+      color: #fff;
+    }
+
+    & .MuiSelect-select:focus {
+      background-color: #fff;
+    }
+  }
+
+  & .card {
+    background-color: #3c424a;
+  }
 }

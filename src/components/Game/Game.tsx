@@ -2,7 +2,7 @@ import React from 'react';
 import shortid from 'shortid';
 import { TypeOfTag } from 'typescript';
 import { generateCards } from '../../common/helpers/game.helper';
-import { Cards, ICard } from '../../common/models/models';
+import { Cards, ICard, ISettings } from '../../common/models/models';
 import Card from './components/Card/Card';
 import './game.scss';
 
@@ -15,8 +15,7 @@ interface IState {
 }
 
 interface IProps {
-  width: number;
-  height: number;
+  settings: ISettings;
   cards: ICard[];
   firstCard: ICard | null;
   secondCard: ICard | null;
@@ -29,7 +28,8 @@ export default class Game extends React.Component<IProps> {
 
   constructor(props: IProps) {
     super(props);
-    const { width = 6, height = 4, cards, firstCard, secondCard, isResumed } = props;
+    const { settings, cards, firstCard, secondCard, isResumed } = props;
+    const { width, height } = settings;
     console.log('cards', cards);
     const size: number = width * height;
     this.state = {
@@ -102,7 +102,7 @@ export default class Game extends React.Component<IProps> {
     if (size === 24) {
       return 'large';
     }
-    if (size === 16) {
+    if (size === 18) {
       return 'medium';
     }
 
@@ -111,13 +111,14 @@ export default class Game extends React.Component<IProps> {
 
   componentDidMount() {
     console.log('component Did Mount');
+    const { delay } = this.props.settings;
     setTimeout(() => {
       const flippedCards: ICard[] = this.state.cards.map((card) => ({ ...card, isFlipped: false }));
       this.setState({
         cards: flippedCards,
         }
       );
-    }, 5000);
+    }, delay * 1000);
   }
 
   animationCheck = (currentCard: ICard): boolean => {

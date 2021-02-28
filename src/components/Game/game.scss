@@ -22,8 +22,17 @@
 .game-field {
 
   &_small {
-    grid-column: 3;
-    grid-row: 2;
+    margin-top: -210px;
+    grid-template-rows: repeat(2, 140px);
+    grid-template-columns: repeat(6, 100px);
+    grid-gap: 10px;
+  }
+
+  &_medium {
+    margin-top: -210px;
+    grid-template-rows: repeat(3, 140px);
+    grid-template-columns: repeat(6, 100px);
+    grid-gap: 10px;
   }
 
   &_large {

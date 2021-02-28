@@ -1,5 +1,5 @@
 import shortid from "shortid";
-import { Cards, ICard } from "../models/models";
+import { Cards, ICard, ISettings } from "../models/models";
 
 const cards: Cards[] = [
   Cards.card1,
@@ -35,7 +35,8 @@ const generateUniqCards = (count: number): ICard[] => {
   return mixedCards;
 };
 
-export const generateCards = (size: number): ICard[] => {
+export const generateCards = (settings: ISettings): ICard[] => {
+  const size = settings.width * settings.height;
   const count = size / 2;
 
   const uniqCards: ICard[] = generateUniqCards(count);

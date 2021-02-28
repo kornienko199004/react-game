@@ -1,0 +1,32 @@
+.settings {
+  width: 50%;
+  max-width: 500px;
+  min-width: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 0 auto;
+}
+
+.settings__form-control {
+  width: 100%;
+  margin-bottom: 20px !important;
+}
+
+.settings__caption {
+  width: 100%;
+  text-align: left;
+  font-weight: 500;
+}
+
+.settings__title {
+  width: 100%;
+  text-align: left;
+}
+
+.settings__controls {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+}

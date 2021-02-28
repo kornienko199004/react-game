@@ -2,7 +2,7 @@ import React from 'react';
 import './main.scss';
 import rsschool from './assets/rsschool.svg';
 import { Route, RouteComponentProps, Switch, withRouter } from 'react-router-dom';
-import { ICard, routes } from '../../../common/models/models';
+import { ICard, ISettings, routes } from '../../../common/models/models';
 import Game from '../../../components/Game/Game';
 import Autoplay from '../../../components/Autoplay/Autoplay';
 import Settings from '../../../components/Settings/Settings';
@@ -10,36 +10,34 @@ import Statistics from '../../../components/Statistics/Statistics';
 import Footer from '../../../components/Footer/Footer';
 import Header from '../../../components/Header/Header';
 import { generateCards } from '../../../common/helpers/game.helper';
+import StorageService from '../../../common/services/storage.service';
 
 interface IState {
   cards: ICard[];
-  size: number;
   firstCard: ICard | null;
   secondCard: ICard | null;
-  width: number;
-  height: number;
+  settings: ISettings;
   isPaused: boolean;
   isResumed: boolean;
 }
 
-const DEFAULT_WIDTH = 6;
-const DEFAULT_HEIGHT= 4;
-
 class Main extends React.Component<RouteComponentProps<any>, any> {
   state: IState;
   history: any;
+  storageService: StorageService;
+  settings: ISettings;
 
   constructor(props: any) {
     super(props);
+
+    this.storageService = new StorageService();
+    this.settings = this.storageService.settings;
     this.history = this.props.history;
-    const size = DEFAULT_WIDTH * DEFAULT_HEIGHT;
     this.state = {
-      size: size,
       cards: [],
       firstCard: null,
       secondCard: null,
-      width: DEFAULT_WIDTH,
-      height: DEFAULT_HEIGHT,
+      settings: this.settings,
       isPaused: false,
       isResumed: false,
     }
@@ -63,17 +61,27 @@ class Main extends React.Component<RouteComponentProps<any>, any> {
   navigationLinkHandler = (e: React.MouseEvent, path: string, name: string) => {
     e.preventDefault();
     if (name === 'New Game') {
+      const settings = this.storageService.settings;
       this.setState({
-        cards: generateCards(this.state.size),
+        cards: generateCards(settings),
         isResumed: false,
+        settings,
       });
     }
     this.history.push(path)
   }
 
+  updateSettingsHandler = (newSettings: ISettings) => {
+    this.storageService.updateSettings(newSettings);
+    this.setState({
+      settings: newSettings,
+    });
+    console.log('update settings', newSettings);
+  }
+
   render() {
     return (
-      <div className="wrapper">
+      <div className={`wrapper ${this.state.settings.theme === 'dark' ? 'wrapper_theme_dark' : ''}`}>
         <Header />
         <div className="page">
           <Switch>
@@ -96,7 +104,7 @@ class Main extends React.Component<RouteComponentProps<any>, any> {
               <Autoplay />
             </Route>
             <Route exact path="/settings">
-              <Settings />
+              <Settings {...{ storageService: this.storageService, updateSettings: this.updateSettingsHandler }} />
             </Route>
             <Route exact path="/statistics">
               <Statistics />
