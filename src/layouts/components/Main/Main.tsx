@@ -2,7 +2,7 @@ import React from 'react';
 import './main.scss';
 import rsschool from './assets/rsschool.svg';
 import { Route, RouteComponentProps, Switch, withRouter } from 'react-router-dom';
-import { ICard, ISettings, routes } from '../../../common/models/models';
+import { ICard, IGameData, ISettings, routes } from '../../../common/models/models';
 import Game from '../../../components/Game/Game';
 import Autoplay from '../../../components/Autoplay/Autoplay';
 import Settings from '../../../components/Settings/Settings';
@@ -19,6 +19,9 @@ interface IState {
   settings: ISettings;
   isPaused: boolean;
   isResumed: boolean;
+  time: number;
+  attempts: number;
+  theme: string;
 }
 
 class Main extends React.Component<RouteComponentProps<any>, any> {
@@ -30,6 +33,7 @@ class Main extends React.Component<RouteComponentProps<any>, any> {
   constructor(props: any) {
     super(props);
 
+    console.log('constructor');
     this.storageService = new StorageService();
     this.settings = this.storageService.settings;
     this.history = this.props.history;
@@ -40,14 +44,20 @@ class Main extends React.Component<RouteComponentProps<any>, any> {
       settings: this.settings,
       isPaused: false,
       isResumed: false,
+      time: 0,
+      attempts: 0,
+      theme: this.settings.theme,
     }
   }
 
-  pausedHandler = (currentGameCards: ICard[]) => {
+  pausedHandler = (currentGameData: IGameData) => {
     this.history.push('/');
     this.setState({
       isPaused: true,
-      cards: currentGameCards,
+      cards: currentGameData.cards,
+      time: currentGameData.time,
+      attempts: currentGameData.attempts,
+      settings: currentGameData.settings,
     })
   }
 
@@ -66,6 +76,8 @@ class Main extends React.Component<RouteComponentProps<any>, any> {
         cards: generateCards(settings),
         isResumed: false,
         settings,
+        time: 0,
+        attempts: 0,
       });
     }
     this.history.push(path)
@@ -74,14 +86,17 @@ class Main extends React.Component<RouteComponentProps<any>, any> {
   updateSettingsHandler = (newSettings: ISettings) => {
     this.storageService.updateSettings(newSettings);
     this.setState({
-      settings: newSettings,
+      theme: newSettings.theme,
     });
+    // this.setState({
+    //   settings: newSettings,
+    // });
     console.log('update settings', newSettings);
   }
 
   render() {
     return (
-      <div className={`wrapper ${this.state.settings.theme === 'dark' ? 'wrapper_theme_dark' : ''}`}>
+      <div className={`wrapper ${this.state.theme === 'dark' ? 'wrapper_theme_dark' : ''}`}>
         <Header />
         <div className="page">
           <Switch>

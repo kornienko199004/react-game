@@ -70,7 +70,45 @@
 }
 
 .statistics {
+  margin-bottom: 20px;
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
   width: 100%;
+}
+
+.score-wrapper {
+  margin-bottom: 10px;
+  width: 150px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.score-wrapper__caption {
+  padding: 0;
+  margin: 0 5px 0 0;
+  font-weight: 500;
+}
+
+.score-wrapper__score {
+  padding: 0;
+  margin: 0;
+}
+
+.time-wrapper {
+  width: 150px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.time-wrapper__caption {
+  padding: 0;
+  margin: 0 5px 0 0;
+  font-weight: 500;
+}
+
+.time-wrapper__time {
+  padding: 0;
+  margin: 0;
 }

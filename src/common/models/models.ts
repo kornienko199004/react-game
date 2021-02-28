@@ -50,3 +50,10 @@ export interface ISettings {
   delay: number;
   theme: string;
 }
+
+export interface IGameData {
+  cards: ICard[];
+  time: number;
+  attempts: number;
+  settings: ISettings;
+}

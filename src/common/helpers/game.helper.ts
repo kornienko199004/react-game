@@ -52,3 +52,13 @@ export const generateCards = (settings: ISettings): ICard[] => {
   mixedCards = mixedCards.map(card => ({ ...card, id: shortid() }));
   return mixedCards;
 };
+
+const addZero = (val: number) => {
+  return String(val).length > 1 ? val : `0${val}`;
+};
+
+export const formatTime = (sec: number): string => {
+  const seconds = sec % 60;
+  const minutes = (sec - seconds) / 60;
+  return `${addZero(minutes)} : ${addZero(seconds)}`;
+};
