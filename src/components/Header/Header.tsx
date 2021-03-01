@@ -10,19 +10,6 @@ export default function Header(props: { children?: any }) {
           <p className="logo__description">train your memory</p>
         </div>
         {props.children}
-        {/* <React.Fragment key={'right'}>
-        <button className="menu-button" onClick={toggleDrawer('right', true)}>
-          <DehazeIcon />
-        </button>
-        <SwipeableDrawer
-          anchor={'right'}
-          open={state['right']}
-          onClose={toggleDrawer('right', false)}
-          onOpen={toggleDrawer('right', true)}
-        >
-          {list('right')}
-        </SwipeableDrawer>
-      </React.Fragment> */}
       </div>
     </div>
   );

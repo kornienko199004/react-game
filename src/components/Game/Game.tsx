@@ -1,7 +1,10 @@
 import React from 'react';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { formatTime } from '../../common/helpers/game.helper';
-import { ICard, IGameData, ISettings } from '../../common/models/models';
+import { ICard, IGameData, IGameWinData, ISettings } from '../../common/models/models';
+import StorageService from '../../common/services/storage.service';
 import Card from './components/Card/Card';
+import WinBanner from './components/WinBanner/WinBanner';
 import './game.scss';
 
 interface IState {
@@ -13,9 +16,10 @@ interface IState {
   startTime: boolean;
   attempts: number;
   time: number;
+  haveWin: boolean;
 }
 
-interface IProps {
+interface IProps extends RouteComponentProps {
   settings: ISettings;
   cards: ICard[];
   firstCard: ICard | null;
@@ -24,16 +28,36 @@ interface IProps {
   isResumed: boolean;
   attempts: number;
   time: number;
+  storageService: StorageService;
 }
 
-export default class Game extends React.Component<IProps> {
+class Game extends React.Component<IProps> {
   state: IState;
+  storageService: StorageService;
 
   constructor(props: IProps) {
     super(props);
-    const { settings, cards, firstCard, secondCard, isResumed, attempts, time } = props;
-    const { width, height } = settings;
+    let { settings, cards, attempts, time } = props;
+    const { firstCard, secondCard, isResumed, storageService } = props;
+    this.storageService = storageService;
+    let startTime = isResumed;
+
     console.log('cards', cards);
+    console.log('props', this.props);
+    if (cards.length === 0) {
+      const savedGameData: IGameData | null = this.storageService.loadGame();
+      if (savedGameData) {
+        settings = savedGameData.settings;
+        cards = savedGameData.cards;
+        attempts = savedGameData.attempts;
+        time = savedGameData.time;
+        startTime = savedGameData.startTime || false;
+      } else {
+        this.props.history.push('/');
+      }
+    }
+
+    const { width, height } = settings;
     const size: number = width * height;
     this.state = {
       size,
@@ -41,9 +65,10 @@ export default class Game extends React.Component<IProps> {
       firstCard,
       secondCard,
       isResumed,
-      startTime: isResumed,
+      startTime,
       attempts,
       time,
+      haveWin: false,
     };
   }
 
@@ -102,6 +127,16 @@ export default class Game extends React.Component<IProps> {
     }, () => {
       this.setState({
         attempts: this.state.attempts + 1,
+      }, () => {
+        const win = this.checkWin();
+        if (win) {
+          this.setState({
+            haveWin: win,
+          });
+          this.onWinHandler();
+        } else {
+          this.saveGame();
+        }
       })
     });
   }
@@ -158,13 +193,53 @@ export default class Game extends React.Component<IProps> {
 
   tick() {
     setTimeout(() => {
-      if (this.state.startTime) {
+      if (this.state.startTime && !this.state.haveWin) {
         this.setState({
           time: this.state.time + 1,
         });
       }
       this.tick();
     }, 1000);
+  }
+
+  saveGame() {
+    const data: IGameData = {
+      cards: this.state.cards,
+      time: this.state.time,
+      attempts: this.state.attempts,
+      settings: this.props.settings,
+      startTime: this.state.startTime,
+    };
+
+    this.storageService.saveGame(data);
+  }
+
+  checkWin() {
+    console.log(this.state);
+    const haveWin = this.state.cards.filter((card: ICard) => !card.found).length === 0;
+    return haveWin;
+  }
+
+  getFieldSizeString(): string {
+    const { settings } = this.props;
+    return `${settings.width}x${settings.height}`;
+  }
+
+  getScore(): number {
+    const { settings } = this.props;
+    const { time, attempts } = this.state;
+    const points = ((settings.width * settings.height * settings.delay) ** 2) / (Math.sqrt(time * attempts));
+    return Number(points.toFixed(0));
+  }
+
+  onWinHandler() {
+    const data: IGameWinData = {
+      time: this.state.time,
+      attempts: this.state.attempts,
+      score: this.getScore(),
+      fieldSize: this.getFieldSizeString(),
+    };
+    this.storageService.onWin(data);
   }
 
   render() {
@@ -198,7 +273,10 @@ export default class Game extends React.Component<IProps> {
             </div>
           ))}
         </div>
+        {this.state.haveWin && <WinBanner time={this.state.time} attempts={this.state.attempts} />}
       </div>
     );
   }
 }
+
+export default withRouter(Game);

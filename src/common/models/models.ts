@@ -56,4 +56,17 @@ export interface IGameData {
   time: number;
   attempts: number;
   settings: ISettings;
+  startTime?: boolean;
+}
+
+export interface IGameWinData {
+  time: number;
+  attempts: number;
+  score: number;
+  fieldSize: string;
+}
+
+export interface IGameStatistics extends IGameWinData {
+  createAt: string;
+  playerName: string;
 }

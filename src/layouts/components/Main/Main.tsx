@@ -112,7 +112,7 @@ class Main extends React.Component<RouteComponentProps<any>, any> {
             </Route>
             <Route exact path="/game">
               <Game
-                {...{ ...this.state, paused: this.pausedHandler } }
+                {...{ ...this.state, paused: this.pausedHandler, storageService: this.storageService } }
               />
             </Route>
             <Route exact path="/autoplay">
