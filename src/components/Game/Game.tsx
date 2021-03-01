@@ -6,6 +6,10 @@ import StorageService from '../../common/services/storage.service';
 import Card from './components/Card/Card';
 import WinBanner from './components/WinBanner/WinBanner';
 import './game.scss';
+// @ts-ignore
+import flipCard from './assets/card_flip.mp3';
+// @ts-ignore
+import foundPair from './assets/cards_found.mp3';
 
 interface IState {
   cards: ICard[];
@@ -34,6 +38,8 @@ interface IProps extends RouteComponentProps {
 class Game extends React.Component<IProps> {
   state: IState;
   storageService: StorageService;
+  flipSound: any;
+  foundSound: any;
 
   constructor(props: IProps) {
     super(props);
@@ -42,8 +48,6 @@ class Game extends React.Component<IProps> {
     this.storageService = storageService;
     let startTime = isResumed;
 
-    console.log('cards', cards);
-    console.log('props', this.props);
     if (cards.length === 0) {
       const savedGameData: IGameData | null = this.storageService.loadGame();
       if (savedGameData) {
@@ -70,9 +74,13 @@ class Game extends React.Component<IProps> {
       time,
       haveWin: false,
     };
+
+    this.flipSound = new Audio(flipCard);
+    this.foundSound = new Audio(foundPair);
   }
 
   changeFlipped(cardId: string) {
+    this.flipSound.play();
     const cardIndex = this.state.cards.findIndex(({ id }) => id === cardId);
 
     const changedCard: ICard = { ...this.state.cards[cardIndex], isFlipped: !this.state.cards[cardIndex].isFlipped };
@@ -90,6 +98,7 @@ class Game extends React.Component<IProps> {
       if (!prevState.secondCard && changedCard.isFlipped) {
         let successGuess: boolean = false;
         if (prevState.firstCard && prevState.firstCard.image === changedCard.image) {
+          this.foundSound.play();
           successGuess = true;
         }
         cardsCopy = cardsCopy.map((card) => {
@@ -155,7 +164,6 @@ class Game extends React.Component<IProps> {
   }
 
   componentDidMount() {
-    console.log('component Did Mount');
     const { delay } = this.props.settings;
     setTimeout(() => {
       const flippedCards: ICard[] = this.state.cards.map((card) => ({ ...card, isFlipped: false }));
@@ -215,7 +223,6 @@ class Game extends React.Component<IProps> {
   }
 
   checkWin() {
-    console.log(this.state);
     const haveWin = this.state.cards.filter((card: ICard) => !card.found).length === 0;
     return haveWin;
   }

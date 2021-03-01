@@ -11,6 +11,8 @@ import Footer from '../../../components/Footer/Footer';
 import Header from '../../../components/Header/Header';
 import { generateCards } from '../../../common/helpers/game.helper';
 import StorageService from '../../../common/services/storage.service';
+// @ts-ignore
+import music from './assets/music.mp3';
 
 interface IState {
   cards: ICard[];
@@ -29,6 +31,7 @@ class Main extends React.Component<RouteComponentProps<any>, any> {
   history: any;
   storageService: StorageService;
   settings: ISettings;
+  musicPlayer: any;
 
   constructor(props: any) {
     super(props);
@@ -48,6 +51,8 @@ class Main extends React.Component<RouteComponentProps<any>, any> {
       attempts: 0,
       theme: this.settings.theme,
     }
+    this.musicPlayer = new Audio(music);
+    this.musicPlayer.loop = true
   }
 
   pausedHandler = (currentGameData: IGameData) => {
@@ -92,6 +97,10 @@ class Main extends React.Component<RouteComponentProps<any>, any> {
     //   settings: newSettings,
     // });
     console.log('update settings', newSettings);
+  }
+
+  componentDidMount() {
+    this.musicPlayer.play();
   }
 
   render() {

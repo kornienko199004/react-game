@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button class="play">play</button>
+  <script>
+      const context = new AudioContext();
+      const player = new Audio('./assets/card_flip.mp3');
+      // context.createMediaElementSource(player);
+      // console.log(context);
+      // context.resume()
+      // .then((res) => {
+      //   console.log(res);
+      // })
+      // const prom = player.play();
+      document.querySelector('.play').addEventListener('click', () => {
+        player.play();
+      })
+    </script>
+</body>
+</html>
