@@ -45,7 +45,6 @@ class Game extends React.Component<IProps> {
 
   constructor(props: IProps) {
     super(props);
-    console.log(props);
     let { settings, cards, attempts, time } = props;
     const { firstCard, secondCard, isResumed, storageService } = props;
     this.storageService = storageService;

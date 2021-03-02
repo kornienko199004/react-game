@@ -39,7 +39,6 @@ export default class StorageService {
   }
 
   public soundsToggle(soundToggle: boolean) {
-    console.log('soundsToggle', soundToggle)
     const newSettings: ISettings = { ...this.settingsObj, soundOn: soundToggle };
     this.saveSettings({ ...newSettings });
     this.settingsObj = { ...newSettings };

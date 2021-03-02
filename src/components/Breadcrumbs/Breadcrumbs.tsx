@@ -3,11 +3,9 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 
 export default function BreadCrumbs(props: { location: { pathname: string }}) {
-  console.log(props);
   const history = useHistory();
   const { location } = props;
   const { pathname } = location;
-  console.log(pathname);
   return (
     <div className="breadcrumbs-wrapper">
       <Breadcrumbs aria-label="breadcrumb">
