@@ -183,10 +183,13 @@
   position: absolute;
   right: 20px;
   z-index: 2;
-  padding-top: 10px;
+  padding: 10px;
+  margin-top: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #fefefe;
+  border-radius: 5px;
 }
 
 .game-controls__button {

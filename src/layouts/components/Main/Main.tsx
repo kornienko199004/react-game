@@ -15,7 +15,6 @@ import StorageService from '../../../common/services/storage.service';
 import music from './assets/music.mp3';
 import musicIcon from './assets/music.svg';
 import soundsIcon from './assets/sounds.svg';
-import { Tooltip } from '@material-ui/core';
 import SoundsControllers from '../../../components/SoundsControllers/SoundsControllers';
 
 interface IState {
@@ -38,11 +37,11 @@ class Main extends React.Component<RouteComponentProps<any>, any> {
   storageService: StorageService;
   settings: ISettings;
   musicPlayer: any;
+  wrapperRef: HTMLElement | null | undefined;
 
   constructor(props: any) {
     super(props);
 
-    console.log('constructor');
     this.storageService = new StorageService();
     this.settings = this.storageService.settings;
     this.history = this.props.history;
@@ -124,9 +123,80 @@ class Main extends React.Component<RouteComponentProps<any>, any> {
     })
   }
 
+  soundsOn = () => {
+    if (!this.state.soundsOn) {
+      this.storageService.soundsToggle(true);
+      this.setState({
+        soundsOn: true,
+      })
+    }
+  }
+
+  soundsOff = () => {
+    if (this.state.soundsOn) {
+      this.storageService.soundsToggle(false);
+      this.setState({
+        soundsOn: false,
+      })
+    }
+  }
+
+  musicOn = () => {
+    if (!this.state.musicOn) {
+      this.musicPlayer.play();
+      this.storageService.musicToggle(true);
+      this.setState({
+        musicOn: true,
+      })
+    }
+  }
+
+  musicOff = () => {
+    if (this.state.musicOn) {
+      this.musicPlayer.pause();
+      this.storageService.musicToggle(false);
+      this.setState({
+        musicOn: false,
+      })
+    }
+  }
+
+  changeTheme = () => {
+    const newTheme = this.state.theme === 'dark' ? 'light' : 'dark';
+    this.updateSettingsHandler({ ...this.settings, theme: newTheme });
+  }
+
+  hotKeysListener(e: KeyboardEvent) {
+    switch(e.code) {
+      case 'KeyA':
+        this.soundsOn();
+        return;
+      case 'KeyS':
+        this.soundsOff();
+        return;
+      case 'KeyD':
+        this.musicOn();
+        return;
+      case 'KeyF':
+        this.musicOff();
+        return;
+      case 'KeyT':
+        this.changeTheme();
+        return;
+      default:
+        return;
+    }
+  };
+
+  componentDidMount() {
+    if (this.wrapperRef) {
+      window.addEventListener('keydown', this.hotKeysListener.bind(this));
+    }
+  }
+
   render() {
     return (
-      <div className={`wrapper ${this.state.theme === 'dark' ? 'wrapper_theme_dark' : ''}`}>
+      <div className={`wrapper ${this.state.theme === 'dark' ? 'wrapper_theme_dark' : ''}`} ref={element => this.wrapperRef = element}>
         <Header />
         <div className="page">
           <SoundsControllers
