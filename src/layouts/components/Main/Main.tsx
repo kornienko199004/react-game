@@ -160,7 +160,7 @@ class Main extends React.Component<RouteComponentProps<any>, any> {
               <Settings {...{ storageService: this.storageService, updateSettings: this.updateSettingsHandler }} />
             </Route>
             <Route exact path="/statistics">
-              <Statistics />
+              <Statistics storageService={this.storageService} />
             </Route>
           </Switch>
         </div>
