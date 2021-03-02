@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Ref } from 'react';
 import './main.scss';
 import rsschool from './assets/rsschool.svg';
 import { Route, RouteComponentProps, Switch, withRouter } from 'react-router-dom';
@@ -13,6 +13,9 @@ import { generateCards } from '../../../common/helpers/game.helper';
 import StorageService from '../../../common/services/storage.service';
 // @ts-ignore
 import music from './assets/music.mp3';
+import musicIcon from './assets/music.svg';
+import soundsIcon from './assets/sounds.svg';
+import { Tooltip } from '@material-ui/core';
 
 interface IState {
   cards: ICard[];
@@ -24,6 +27,8 @@ interface IState {
   time: number;
   attempts: number;
   theme: string;
+  musicOn: boolean;
+  soundsOn: boolean;
 }
 
 class Main extends React.Component<RouteComponentProps<any>, any> {
@@ -32,6 +37,7 @@ class Main extends React.Component<RouteComponentProps<any>, any> {
   storageService: StorageService;
   settings: ISettings;
   musicPlayer: any;
+  musicOnButton: HTMLButtonElement | null;
 
   constructor(props: any) {
     super(props);
@@ -50,9 +56,14 @@ class Main extends React.Component<RouteComponentProps<any>, any> {
       time: 0,
       attempts: 0,
       theme: this.settings.theme,
+      musicOn: false,
+      soundsOn: this.settings.soundOn,
     }
     this.musicPlayer = new Audio(music);
-    this.musicPlayer.loop = true
+    this.musicPlayer.loop = true;
+    this.musicPlayer.volume = this.settings.musicVolume;
+    // this.musicOnButton = React.createRef<HTMLButtonElement>();
+    this.musicOnButton = null;
   }
 
   pausedHandler = (currentGameData: IGameData) => {
@@ -99,15 +110,62 @@ class Main extends React.Component<RouteComponentProps<any>, any> {
     console.log('update settings', newSettings);
   }
 
+  musicToggle = () => {
+    console.log('musicToggle');
+    if (!this.state.musicOn) {
+      this.musicPlayer.play();
+    } else {
+      this.musicPlayer.pause();
+    }
+    this.storageService.musicToggle(!this.state.musicOn);
+    this.setState({
+      musicOn: !this.state.musicOn,
+    })
+  }
+
+  soundsToggle = () => {
+    this.storageService.soundsToggle(!this.state.soundsOn);
+    this.setState({
+      soundsOn: !this.state.soundsOn,
+    })
+  }
+
   componentDidMount() {
-    this.musicPlayer.play();
+    if (this.settings.musicOn && this.musicOnButton) {
+      const ev2 = new Event('click', { bubbles: true});
+      console.log(this.musicOnButton);
+      // this.musicOnButton.click();
+      this.musicOnButton.dispatchEvent(ev2);
+    }
   }
 
   render() {
+    // if (this.state.musicOn) {
+    //   this.musicPlayer.play();
+    // } else {
+    //   this.musicPlayer.pause();
+    // }
     return (
       <div className={`wrapper ${this.state.theme === 'dark' ? 'wrapper_theme_dark' : ''}`}>
         <Header />
         <div className="page">
+          <div className="game-controls">
+            <Tooltip title="Sounds ON / OFF">
+              <button
+                className={`game-controls__button ${this.state.soundsOn ? '' : 'game-controls__button_mute'}`}
+                onClick={this.soundsToggle}>
+                <img src={soundsIcon} alt="Sound ON / OFF"/>
+              </button>
+            </Tooltip>
+            <Tooltip title="Music ON / OFF" >
+              <button
+                className={`game-controls__button ${this.state.musicOn ? '' : 'game-controls__button_mute'}`}
+                ref={(button: HTMLButtonElement) => this.musicOnButton = button}
+                onClick={this.musicToggle} >
+                <img src={musicIcon} alt="Music ON / OFF"/>
+              </button>
+            </Tooltip>
+          </div>
           <Switch>
             <Route exact path="/">
               <h1>Menu</h1>

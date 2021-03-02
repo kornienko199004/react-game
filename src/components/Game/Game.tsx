@@ -33,6 +33,7 @@ interface IProps extends RouteComponentProps {
   attempts: number;
   time: number;
   storageService: StorageService;
+  soundsOn: boolean;
 }
 
 class Game extends React.Component<IProps> {
@@ -43,6 +44,7 @@ class Game extends React.Component<IProps> {
 
   constructor(props: IProps) {
     super(props);
+    console.log(props);
     let { settings, cards, attempts, time } = props;
     const { firstCard, secondCard, isResumed, storageService } = props;
     this.storageService = storageService;
@@ -76,11 +78,16 @@ class Game extends React.Component<IProps> {
     };
 
     this.flipSound = new Audio(flipCard);
+    this.flipSound.volume = settings.soundsVolume;
     this.foundSound = new Audio(foundPair);
+    this.foundSound.volume = settings.soundsVolume;
   }
 
   changeFlipped(cardId: string) {
-    this.flipSound.play();
+    if (this.props.soundsOn) {
+      this.flipSound.volume = this.storageService.settings.soundsVolume;
+      this.flipSound.play();
+    }
     const cardIndex = this.state.cards.findIndex(({ id }) => id === cardId);
 
     const changedCard: ICard = { ...this.state.cards[cardIndex], isFlipped: !this.state.cards[cardIndex].isFlipped };
@@ -98,7 +105,10 @@ class Game extends React.Component<IProps> {
       if (!prevState.secondCard && changedCard.isFlipped) {
         let successGuess: boolean = false;
         if (prevState.firstCard && prevState.firstCard.image === changedCard.image) {
-          this.foundSound.play();
+          if (this.props.soundsOn) {
+            this.flipSound.volume = this.storageService.settings.soundsVolume;
+            this.foundSound.play();
+          }
           successGuess = true;
         }
         cardsCopy = cardsCopy.map((card) => {

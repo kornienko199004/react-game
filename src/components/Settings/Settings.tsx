@@ -57,6 +57,23 @@ const themeSettingsList = () => themeSettings.map((option: string) => (
   <MenuItem value={option} key={option}>{option}</MenuItem>
 ));
 
+const soundsSettings: string[] = ['low', 'medium', 'high'];
+const soundsSettingsList = () => soundsSettings.map((option) => (
+  <MenuItem value={option} key={option}>{option}</MenuItem>
+));
+
+const soundVolumeMap: { [k: string]: number } = {
+  low: 0.2,
+  medium: 0.5,
+  high: 1,
+};
+
+const soundVolumeReverseMap: { [k: string]: string } = {
+  '0.2': 'low',
+  '0.5': 'medium',
+  '1': 'high',
+};
+
 interface IProps {
   storageService: StorageService;
   updateSettings(settings: ISettings): void;
@@ -70,6 +87,8 @@ export default function Settings(props: IProps) {
   const [fieldSize, setFieldSize] = React.useState(size);
   const [showTime, setShowTime] = React.useState(settings.delay);
   const [theme, setTheme] = React.useState(settings.theme);
+  const [sounds, setSoundsVolume] = React.useState(soundVolumeReverseMap[settings.soundsVolume]);
+  const [music, setMusicVolume] = React.useState(soundVolumeReverseMap[settings.musicVolume]);
   const history = useHistory();
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -84,6 +103,12 @@ export default function Settings(props: IProps) {
       case 'theme':
         setTheme(event.target.value as string);
         break;
+      case 'sounds':
+        setSoundsVolume(event.target.value as string);
+        break;
+      case 'music':
+        setMusicVolume(event.target.value as string);
+        break;
       default:
         return;
     }
@@ -97,6 +122,8 @@ export default function Settings(props: IProps) {
       height,
       delay: showTime,
       theme,
+      soundsVolume: soundVolumeMap[sounds],
+      musicVolume: soundVolumeMap[music],
     };
     updateSettings(newSettings);
     history.push('/');
@@ -145,6 +172,32 @@ export default function Settings(props: IProps) {
           input={<BootstrapInput />}
         >
           {themeSettingsList()}
+        </Select>
+      </FormControl>
+
+      <p className="settings__caption">Choose music volume</p>
+      <FormControl className="settings__form-control">
+        <InputLabel>Music volume</InputLabel>
+        <Select
+          value={music}
+          onChange={handleChange}
+          name="music"
+          input={<BootstrapInput />}
+        >
+          {soundsSettingsList()}
+        </Select>
+      </FormControl>
+
+      <p className="settings__caption">Choose sounds volume</p>
+      <FormControl className="settings__form-control">
+        <InputLabel id="demo-simple-select-label">Sounds volume</InputLabel>
+        <Select
+          value={sounds}
+          onChange={handleChange}
+          name="sounds"
+          input={<BootstrapInput />}
+        >
+          {soundsSettingsList()}
         </Select>
       </FormControl>
       <div className="settings__controls">

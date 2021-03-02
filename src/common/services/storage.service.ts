@@ -5,6 +5,10 @@ const DEFAULT_SETTINGS: ISettings = {
   height: 4,
   delay: 5,
   theme: 'light',
+  soundOn: true,
+  musicOn: true,
+  soundsVolume: 0.2,
+  musicVolume: 0.2,
 };
 
 const SETTINGS_KEY = 'MEMORY_GAME_SETTINGS';
@@ -31,6 +35,19 @@ export default class StorageService {
     }
 
     this.saveSettings(newSettings);
+    this.settingsObj = { ...newSettings };
+  }
+
+  public soundsToggle(soundToggle: boolean) {
+    console.log('soundsToggle', soundToggle)
+    const newSettings: ISettings = { ...this.settingsObj, soundOn: soundToggle };
+    this.saveSettings({ ...newSettings });
+    this.settingsObj = { ...newSettings };
+  }
+
+  public musicToggle(musicToggle: boolean) {
+    const newSettings: ISettings = { ...this.settingsObj, soundOn: musicToggle };
+    this.saveSettings({ ...newSettings });
     this.settingsObj = { ...newSettings };
   }
 

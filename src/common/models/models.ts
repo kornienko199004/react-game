@@ -49,6 +49,10 @@ export interface ISettings {
   height: number;
   delay: number;
   theme: string;
+  soundOn: boolean;
+  musicOn: boolean;
+  soundsVolume: number;
+  musicVolume: number;
 }
 
 export interface IGameData {
