@@ -184,7 +184,6 @@
   right: 20px;
   z-index: 2;
   padding: 10px;
-  margin-top: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -247,4 +246,20 @@
 
 .statistics-wrapper {
   padding: 10px 20px;
+}
+
+.MuiListItem-gutters {
+  text-align: center !important;
+}
+
+.breadcrumb-page {
+  text-transform: capitalize;
+}
+
+.breadcrumb-link {
+  cursor: pointer;
+}
+
+.breadcrumbs-wrapper {
+  padding: 20px;
 }

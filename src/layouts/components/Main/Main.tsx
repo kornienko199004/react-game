@@ -2,7 +2,7 @@ import React from 'react';
 import './main.scss';
 import rsschool from './assets/rsschool.svg';
 import { Route, RouteComponentProps, Switch, withRouter } from 'react-router-dom';
-import { ICard, IGameData, ISettings, routes } from '../../../common/models/models';
+import { ICard, IGameData, ISettings } from '../../../common/models/models';
 import Game from '../../../components/Game/Game';
 import Autoplay from '../../../components/Autoplay/Autoplay';
 import Settings from '../../../components/Settings/Settings';
@@ -16,6 +16,8 @@ import music from './assets/music.mp3';
 import musicIcon from './assets/music.svg';
 import soundsIcon from './assets/sounds.svg';
 import SoundsControllers from '../../../components/SoundsControllers/SoundsControllers';
+import Menu from '../../../components/Menu/Menu';
+import BreadCrumbs from '../../../components/Breadcrumbs/Breadcrumbs';
 
 interface IState {
   cards: ICard[];
@@ -195,10 +197,10 @@ class Main extends React.Component<RouteComponentProps<any>, any> {
   }
 
   render() {
+    const { location } = this.props;
     return (
       <div className={`wrapper ${this.state.theme === 'dark' ? 'wrapper_theme_dark' : ''}`} ref={element => this.wrapperRef = element}>
-        <Header />
-        <div className="page">
+        <Header>
           <SoundsControllers
             soundsIcon={soundsIcon}
             musicIcon={musicIcon}
@@ -207,16 +209,16 @@ class Main extends React.Component<RouteComponentProps<any>, any> {
             soundsToggle={this.soundsToggle}
             musicToggle={this.musicToggle}
           />
+          </Header>
+        <div className="page">
+          {location.pathname !== '/' && location.pathname !== '/game' && <BreadCrumbs location={location}/>}
           <Switch>
             <Route exact path="/">
-              <h1>Menu</h1>
-              {this.state.isPaused && (<button onClick={this.resumeHandler}>Resume</button>)}
-              {routes.map(({ button, path }) => (
-                <div key={button}>
-                  <a href={path} onClick={(e: React.MouseEvent) => this.navigationLinkHandler(e, path, button)}>{button}</a>
-                  {/* <Link to={path}>{button}</Link> */}
-                </div>
-              ))}
+              <Menu
+                isPaused={this.state.isPaused}
+                resumeHandler={this.resumeHandler}
+                navigationLinkHandler={this.navigationLinkHandler}
+              />
             </Route>
             <Route exact path="/game">
               <Game

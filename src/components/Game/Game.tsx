@@ -10,6 +10,7 @@ import './game.scss';
 import flipCard from './assets/card_flip.mp3';
 // @ts-ignore
 import foundPair from './assets/cards_found.mp3';
+import { Button } from '@material-ui/core';
 
 interface IState {
   cards: ICard[];
@@ -264,17 +265,22 @@ class Game extends React.Component<IProps> {
 
     return (
       <div className="game">
-        <button onClick={this.pauseHandler}>
-          Pause
-          </button>
         <div className="statistics">
-          <div className="score-wrapper">
-            <p className="score-wrapper__caption">Attempts:</p>
-            <p className="score-wrapper__score">{this.state.attempts}</p>
+          <div className="statistics__inner">
+            <Button
+              variant="contained"
+              className="pause-button"
+              onClick={this.pauseHandler}>Pause</Button>
           </div>
+          <div className="statistics__inner">
+            <div className="score-wrapper">
+              <p className="score-wrapper__caption">Attempts:</p>
+              <p className="score-wrapper__score">{this.state.attempts}</p>
+            </div>
 
-          <div className="time-wrapper">
-            <p className="time-wrapper__caption">Time:</p> <p className="time-wrapper__time">{formatTime(this.state.time)}</p>
+            <div className="time-wrapper">
+              <p className="time-wrapper__caption">Time:</p> <p className="time-wrapper__time">{formatTime(this.state.time)}</p>
+            </div>
           </div>
         </div>
         <div className={`game-field game-field_${this.getFieldSize()}`}>
