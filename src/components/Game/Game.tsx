@@ -22,6 +22,7 @@ interface IState {
   attempts: number;
   time: number;
   haveWin: boolean;
+  toFlipId: string;
 }
 
 interface IProps extends RouteComponentProps {
@@ -35,6 +36,7 @@ interface IProps extends RouteComponentProps {
   time: number;
   storageService: StorageService;
   soundsOn: boolean;
+  autoPlay?: boolean;
 }
 
 class Game extends React.Component<IProps> {
@@ -75,6 +77,7 @@ class Game extends React.Component<IProps> {
       attempts,
       time,
       haveWin: false,
+      toFlipId: '',
     };
 
     this.flipSound = new Audio(flipCard);
@@ -152,7 +155,9 @@ class Game extends React.Component<IProps> {
           this.setState({
             haveWin: win,
           });
-          this.onWinHandler();
+          if (!this.props.autoPlay) {
+            this.onWinHandler();
+          }
         } else {
           this.saveGame();
         }
@@ -173,6 +178,20 @@ class Game extends React.Component<IProps> {
     return 'small';
   }
 
+  autoPlaying() {
+    const { cards } = this.state;
+    const acceptedCards = cards.filter((item) => !item.found && !item.isFlipped);
+    if (acceptedCards.length > 0) {
+      const index = Math.floor(Math.random() * acceptedCards.length);
+      const card = acceptedCards[index];
+      this.changeFlipped(card.id);
+
+      setTimeout(() => {
+        this.autoPlaying();
+      }, 1000);
+    }
+  }
+
   componentDidMount() {
     const { delay } = this.props.settings;
     setTimeout(() => {
@@ -180,6 +199,10 @@ class Game extends React.Component<IProps> {
       this.setState({
         cards: flippedCards,
         startTime: true,
+      }, () => {
+        setTimeout(() => {
+          this.autoPlaying();
+        }, 1000);
       });
     }, delay * 1000);
     this.tick();
@@ -261,6 +284,7 @@ class Game extends React.Component<IProps> {
 
   render() {
     const { cards } = this.state;
+    const { autoPlay } = this.props;
 
     return (
       <div className="game">
@@ -269,7 +293,7 @@ class Game extends React.Component<IProps> {
             <Button
               variant="contained"
               className="pause-button"
-              onClick={this.pauseHandler}>Pause</Button>
+              onClick={this.pauseHandler}>{autoPlay ? 'Stop' : 'Pause'}</Button>
           </div>
           <div className="statistics__inner">
             <div className="score-wrapper">
@@ -283,6 +307,7 @@ class Game extends React.Component<IProps> {
           </div>
         </div>
         <div className={`game-field game-field_${this.getFieldSize()}`}>
+          {autoPlay && <div className="game__overlay"></div>}
           {cards.map((card: ICard) => (
             <div className="game-field__item" key={card.id}>
               <Card

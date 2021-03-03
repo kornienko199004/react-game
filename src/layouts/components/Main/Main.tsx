@@ -226,7 +226,7 @@ class Main extends React.Component<RouteComponentProps<any>, any> {
               />
             </Route>
             <Route exact path="/autoplay">
-              <Autoplay />
+              <Autoplay storageService={this.storageService} />
             </Route>
             <Route exact path="/settings">
               <Settings {...{ storageService: this.storageService, updateSettings: this.updateSettingsHandler }} />

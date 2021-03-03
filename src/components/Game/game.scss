@@ -20,6 +20,7 @@
 }
 
 .game-field {
+  position: relative;
   --cardWidth: 140px;
   --cardHeight: 100px;
   --smallRows: 2;
@@ -115,4 +116,13 @@
 .time-wrapper__time {
   padding: 0;
   margin: 0;
+}
+
+.game__overlay {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
 }
