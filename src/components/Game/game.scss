@@ -3,13 +3,17 @@
   height: 100%;
 }
 
+.game_fullscreen {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  background: #fff;
+}
+
 .game-field {
-  // position: absolute;
-  top: 50%;
   width: 100%;
   margin: 0 auto;
-  // display: flex;
-  // flex-wrap: wrap;
   display: grid;
   justify-content: center;
 }
@@ -79,8 +83,12 @@
   width: 100%;
 }
 
-.statistics__inner:first-child {
+.statistics__inner {
   margin-right: 20px;
+}
+
+.statistics__inner:last-child {
+  margin-right: 0;
 }
 
 .score-wrapper {

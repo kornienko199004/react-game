@@ -10,7 +10,8 @@ import './game.scss';
 import flipCard from './assets/card_flip.mp3';
 // @ts-ignore
 import foundPair from './assets/cards_found.mp3';
-import { Button } from '@material-ui/core';
+import { Button, IconButton } from '@material-ui/core';
+import { Fullscreen, FullscreenExit } from '@material-ui/icons';
 
 interface IState {
   cards: ICard[];
@@ -22,7 +23,7 @@ interface IState {
   attempts: number;
   time: number;
   haveWin: boolean;
-  toFlipId: string;
+  fullScreen: boolean;
 }
 
 interface IProps extends RouteComponentProps {
@@ -77,7 +78,7 @@ class Game extends React.Component<IProps> {
       attempts,
       time,
       haveWin: false,
-      toFlipId: '',
+      fullScreen: false,
     };
 
     this.flipSound = new Audio(flipCard);
@@ -200,9 +201,11 @@ class Game extends React.Component<IProps> {
         cards: flippedCards,
         startTime: true,
       }, () => {
-        setTimeout(() => {
-          this.autoPlaying();
-        }, 1000);
+        if (this.props.autoPlay) {
+          setTimeout(() => {
+            this.autoPlaying();
+          }, 1000);
+        }
       });
     }, delay * 1000);
     this.tick();
@@ -282,12 +285,18 @@ class Game extends React.Component<IProps> {
     this.storageService.onWin(data);
   }
 
+  fullScreenToggle = () => {
+    this.setState({
+      fullScreen: !this.state.fullScreen,
+    });
+  }
+
   render() {
-    const { cards } = this.state;
+    const { cards, fullScreen } = this.state;
     const { autoPlay } = this.props;
 
     return (
-      <div className="game">
+      <div className={`game ${fullScreen ? 'game_fullscreen' : ''}`}>
         <div className="statistics">
           <div className="statistics__inner">
             <Button
@@ -304,6 +313,11 @@ class Game extends React.Component<IProps> {
             <div className="time-wrapper">
               <p className="time-wrapper__caption">Time:</p> <p className="time-wrapper__time">{formatTime(this.state.time)}</p>
             </div>
+          </div>
+          <div className="statistics__inner">
+            <IconButton color="primary" onClick={this.fullScreenToggle} component="span">
+              {fullScreen ? <FullscreenExit /> : <Fullscreen />}
+            </IconButton>
           </div>
         </div>
         <div className={`game-field game-field_${this.getFieldSize()}`}>
