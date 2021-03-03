@@ -45,6 +45,7 @@ class Game extends React.Component<IProps> {
   storageService: StorageService;
   flipSound: any;
   foundSound: any;
+  timer: ReturnType<typeof setTimeout> | undefined;
 
   constructor(props: IProps) {
     super(props);
@@ -88,11 +89,16 @@ class Game extends React.Component<IProps> {
   }
 
   changeFlipped(cardId: string) {
+    const cardIndex = this.state.cards.findIndex(({ id }) => id === cardId);
+
+    if (this.state.cards[cardIndex].isFlipped) {
+      return;
+    }
+
     if (this.props.soundsOn) {
       this.flipSound.volume = this.storageService.settings.soundsVolume;
       this.flipSound.play();
     }
-    const cardIndex = this.state.cards.findIndex(({ id }) => id === cardId);
 
     const changedCard: ICard = { ...this.state.cards[cardIndex], isFlipped: !this.state.cards[cardIndex].isFlipped };
     let cardsCopy = this.state.cards.slice();
@@ -195,7 +201,7 @@ class Game extends React.Component<IProps> {
 
   componentDidMount() {
     const { delay } = this.props.settings;
-    setTimeout(() => {
+    this.timer = setTimeout(() => {
       const flippedCards: ICard[] = this.state.cards.map((card) => ({ ...card, isFlipped: false }));
       this.setState({
         cards: flippedCards,
@@ -209,6 +215,12 @@ class Game extends React.Component<IProps> {
       });
     }, delay * 1000);
     this.tick();
+  }
+
+  componentWillUnmount() {
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
   }
 
   animationCheck = (currentCard: ICard): boolean => {
