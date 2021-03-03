@@ -32,7 +32,7 @@ router.get('/', async (req, res) => {
       .find()
       .sort({ score: -1})
       .limit(10);
-    res.json(data);
+    res.status(200).json(data);
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: 'Server error' });

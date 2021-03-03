@@ -1,4 +1,9 @@
-import { IGameData, IGameStatistics, IGameWinData, ISettings } from '../models/models';
+import {
+  IGameData,
+  IGameStatistics,
+  IGameWinData,
+  ISettings
+} from '../models/models';
 
 const DEFAULT_SETTINGS: ISettings = {
   width: 6,
@@ -9,6 +14,7 @@ const DEFAULT_SETTINGS: ISettings = {
   musicOn: true,
   soundsVolume: 0.2,
   musicVolume: 0.2,
+  playerName: 'player',
 };
 
 const SETTINGS_KEY = 'MEMORY_GAME_SETTINGS';
@@ -39,13 +45,19 @@ export default class StorageService {
   }
 
   public soundsToggle(soundToggle: boolean) {
-    const newSettings: ISettings = { ...this.settingsObj, soundOn: soundToggle };
+    const newSettings: ISettings = {
+      ...this.settingsObj,
+      soundOn: soundToggle
+    };
     this.saveSettings({ ...newSettings });
     this.settingsObj = { ...newSettings };
   }
 
   public musicToggle(musicToggle: boolean) {
-    const newSettings: ISettings = { ...this.settingsObj, soundOn: musicToggle };
+    const newSettings: ISettings = {
+      ...this.settingsObj,
+      soundOn: musicToggle
+    };
     this.saveSettings({ ...newSettings });
     this.settingsObj = { ...newSettings };
   }
@@ -67,9 +79,10 @@ export default class StorageService {
     const statisticsData: IGameStatistics = {
       ...data,
       createAt: new Date().toISOString(),
-      playerName: 'player',
-    }
+      playerName: this.settings.playerName,
+    };
     this.addDataToStatistics(statisticsData);
+    this.addDataToDataBase(statisticsData);
   }
 
   public getStatisticsData(): IGameStatistics[] | null {
@@ -78,6 +91,14 @@ export default class StorageService {
       return JSON.parse(statisticsData);
     }
     return null;
+  }
+
+  public async getTopData(): Promise<IGameStatistics[] | null> {
+    const response = await fetch('/api/top/', {
+      method: 'GET',
+    });
+    const data = response.json();
+    return data;
   }
 
   private loadSettings(): ISettings | null {
@@ -99,7 +120,9 @@ export default class StorageService {
   private addDataToStatistics(data: IGameStatistics): void {
     let statisticsData: IGameStatistics[];
     try {
-      statisticsData = JSON.parse(localStorage.getItem(STATISTICS_GAME_KEY) as string);
+      statisticsData = JSON.parse(
+        localStorage.getItem(STATISTICS_GAME_KEY) as string
+      );
       if (!statisticsData) {
         throw Error();
       }
@@ -109,5 +132,22 @@ export default class StorageService {
 
     statisticsData.push(data);
     localStorage.setItem(STATISTICS_GAME_KEY, JSON.stringify(statisticsData));
+  }
+
+  private async addDataToDataBase(data: IGameStatistics): Promise<any> {
+    try {
+      const response = await fetch('/api/top/add', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      if (!response.ok) {
+        throw Error('Server Error');
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
 }

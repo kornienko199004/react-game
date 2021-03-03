@@ -42,6 +42,10 @@ export const routes: IRouterItem[] = [
     button: 'Statistics',
     path: 'statistics',
   },
+  {
+    button: 'Top List',
+    path: 'top',
+  },
 ];
 
 export interface ISettings {
@@ -53,6 +57,7 @@ export interface ISettings {
   musicOn: boolean;
   soundsVolume: number;
   musicVolume: number;
+  playerName: string;
 }
 
 export interface IGameData {

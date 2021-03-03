@@ -1,4 +1,4 @@
-import { Button, createStyles, FormControl, InputBase, InputLabel, MenuItem, Select, Theme, withStyles } from '@material-ui/core';
+import { Button, createStyles, FormControl, InputBase, InputLabel, MenuItem, Select, TextField, Theme, withStyles } from '@material-ui/core';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { ISettings } from '../../common/models/models';
@@ -84,6 +84,7 @@ export default function Settings(props: IProps) {
 
   const size: string = `${settings.width}x${settings.height}`;
 
+  const [userName, setUserName] = React.useState(settings.playerName);
   const [fieldSize, setFieldSize] = React.useState(size);
   const [showTime, setShowTime] = React.useState(settings.delay);
   const [theme, setTheme] = React.useState(settings.theme);
@@ -94,6 +95,9 @@ export default function Settings(props: IProps) {
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
 
     switch ((event.target as any).name) {
+      case 'userName':
+        setUserName(event.target.value as string);
+        break;
       case 'fieldSize':
         setFieldSize(event.target.value as string);
         break;
@@ -118,6 +122,7 @@ export default function Settings(props: IProps) {
     const [width, height] = fieldSize.split('x').map((item) => Number(item));
     const newSettings: ISettings = {
       ...settings,
+      playerName: userName,
       width,
       height,
       delay: showTime,
@@ -132,6 +137,17 @@ export default function Settings(props: IProps) {
   return (
     <div className="settings">
       <h2 className="settings__title">Settings</h2>
+      <p className="settings__caption">Input User Name</p>
+      <FormControl className="settings__form-control">
+        <TextField
+          id="outlined-basic"
+          label="User Name"
+          variant="outlined"
+          value={userName}
+          onChange={handleChange}
+          name="userName"
+        />
+      </FormControl>
       <p className="settings__caption">Choose the field size</p>
       <FormControl className="settings__form-control">
         <InputLabel id="demo-simple-select-label">Field</InputLabel>

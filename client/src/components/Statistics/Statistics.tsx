@@ -10,6 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import StorageService from '../../common/services/storage.service';
 import { IGameStatistics } from '../../common/models/models';
 import moment from 'moment';
+import shortid from 'shortid';
 
 const useStyles = makeStyles({
   table: {
@@ -20,7 +21,6 @@ const useStyles = makeStyles({
 export default function Statistics(props: { storageService: StorageService }) {
   const classes = useStyles();
   const statistics: IGameStatistics[] = props.storageService.getStatisticsData() || [];
-  console.log(statistics[0])
   const dataSource: IGameStatistics[] = statistics.slice().sort((a, b) => b.score - a.score).slice(0, 10);
 
   return (
@@ -41,7 +41,7 @@ export default function Statistics(props: { storageService: StorageService }) {
         </TableHead>
         <TableBody>
           {dataSource.map((row: IGameStatistics, index: number) => (
-            <TableRow key={row.createAt}>
+            <TableRow key={shortid()}>
               <TableCell component="th" scope="row" align="left"><b>{index + 1}</b></TableCell>
               <TableCell align="center">
                 {row.playerName}

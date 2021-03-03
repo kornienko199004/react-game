@@ -18,6 +18,7 @@ import soundsIcon from './assets/sounds.svg';
 import SoundsControllers from '../../../components/SoundsControllers/SoundsControllers';
 import Menu from '../../../components/Menu/Menu';
 import BreadCrumbs from '../../../components/Breadcrumbs/Breadcrumbs';
+import TopList from '../../../components/TopList/TopList';
 
 interface IState {
   cards: ICard[];
@@ -233,6 +234,9 @@ class Main extends React.Component<RouteComponentProps<any>, any> {
             </Route>
             <Route exact path="/statistics">
               <Statistics storageService={this.storageService} />
+            </Route>
+            <Route exact path="/top">
+              <TopList storageService={this.storageService} />
             </Route>
           </Switch>
         </div>
