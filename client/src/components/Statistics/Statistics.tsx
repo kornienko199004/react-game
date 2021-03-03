@@ -20,6 +20,7 @@ const useStyles = makeStyles({
 export default function Statistics(props: { storageService: StorageService }) {
   const classes = useStyles();
   const statistics: IGameStatistics[] = props.storageService.getStatisticsData() || [];
+  console.log(statistics[0])
   const dataSource: IGameStatistics[] = statistics.slice().sort((a, b) => b.score - a.score).slice(0, 10);
 
   return (
