@@ -1,17 +1,13 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { Button, IconButton } from '@material-ui/core';
+import { Fullscreen, FullscreenExit } from '@material-ui/icons';
 import { formatTime } from '../../common/helpers/game.helper';
 import { ICard, IGameData, IGameWinData, ISettings } from '../../common/models/models';
 import StorageService from '../../common/services/storage.service';
 import Card from './components/Card/Card';
 import WinBanner from './components/WinBanner/WinBanner';
 import './game.scss';
-// @ts-ignore
-import flipCard from './assets/card_flip.mp3';
-// @ts-ignore
-import foundPair from './assets/cards_found.mp3';
-import { Button, IconButton } from '@material-ui/core';
-import { Fullscreen, FullscreenExit } from '@material-ui/icons';
 
 interface IState {
   cards: ICard[];
@@ -82,6 +78,8 @@ class Game extends React.Component<IProps> {
       fullScreen: false,
     };
 
+    const flipCard = `${process.env.PUBLIC_URL}/card_flip.mp3`;
+    const foundPair = `${process.env.PUBLIC_URL}/cards_found.mp3`;
     this.flipSound = new Audio(flipCard);
     this.flipSound.volume = settings.soundsVolume;
     this.foundSound = new Audio(foundPair);

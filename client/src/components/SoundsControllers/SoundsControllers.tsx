@@ -1,5 +1,6 @@
-import { Tooltip } from '@material-ui/core';
 import React from 'react';
+import { Tooltip } from '@material-ui/core';
+import classnames from 'classnames';
 
 interface IProps {
   soundsIcon: string;
@@ -16,7 +17,7 @@ export default function SoundsControllers(props: IProps) {
     <div className="game-controls">
     <Tooltip title="Sounds ON / OFF">
       <button
-        className={`game-controls__button ${soundsOn ? '' : 'game-controls__button_mute'}`}
+        className={classnames('game-controls__button', `${soundsOn ? '' : 'game-controls__button_mute'}`)}
         onClick={soundsToggle}>
         <img src={soundsIcon} alt="Sound ON / OFF"/>
       </button>

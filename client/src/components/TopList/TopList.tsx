@@ -21,8 +21,6 @@ const useStyles = makeStyles({
 export default function TopList(props: { storageService: StorageService }) {
   const classes = useStyles();
   const [dataSource, setData] = useState<IGameStatistics[]>();
-  // const statistics: IGameStatistics[] = props.storageService.getStatisticsData() || [];
-  // const dataSource: IGameStatistics[] = statistics.slice().sort((a, b) => b.score - a.score).slice(0, 10);
 
   useEffect(() => {
     const getNote = async () => {

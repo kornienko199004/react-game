@@ -1,6 +1,4 @@
 import React from 'react';
-import './main.scss';
-import rsschool from './assets/rsschool.svg';
 import { Route, RouteComponentProps, Switch, withRouter } from 'react-router-dom';
 import { ICard, IGameData, ISettings } from '../../../common/models/models';
 import Game from '../../../components/Game/Game';
@@ -11,14 +9,14 @@ import Footer from '../../../components/Footer/Footer';
 import Header from '../../../components/Header/Header';
 import { generateCards } from '../../../common/helpers/game.helper';
 import StorageService from '../../../common/services/storage.service';
-// @ts-ignore
-import music from './assets/music.mp3';
-import musicIcon from './assets/music.svg';
-import soundsIcon from './assets/sounds.svg';
 import SoundsControllers from '../../../components/SoundsControllers/SoundsControllers';
 import Menu from '../../../components/Menu/Menu';
 import BreadCrumbs from '../../../components/Breadcrumbs/Breadcrumbs';
 import TopList from '../../../components/TopList/TopList';
+import musicIcon from './assets/music.svg';
+import soundsIcon from './assets/sounds.svg';
+import rsschool from './assets/rsschool.svg';
+import './main.scss';
 
 interface IState {
   cards: ICard[];
@@ -34,8 +32,7 @@ interface IState {
   soundsOn: boolean;
 }
 
-class Main extends React.Component<RouteComponentProps<any>, any> {
-  state: IState;
+class Main extends React.Component<RouteComponentProps<any>, IState> {
   history: any;
   storageService: StorageService;
   settings: ISettings;
@@ -61,6 +58,7 @@ class Main extends React.Component<RouteComponentProps<any>, any> {
       musicOn: false,
       soundsOn: this.settings.soundOn,
     }
+    const music = `${process.env.PUBLIC_URL}/music.mp3`;
     this.musicPlayer = new Audio(music);
     this.musicPlayer.loop = true;
     this.musicPlayer.volume = this.settings.musicVolume;
@@ -199,6 +197,9 @@ class Main extends React.Component<RouteComponentProps<any>, any> {
 
   render() {
     const { location } = this.props;
+    const gameProps = { ...this.state, paused: this.pausedHandler, storageService: this.storageService };
+    const settingsProps = { storageService: this.storageService, updateSettings: this.updateSettingsHandler };
+
     return (
       <div className={`wrapper ${this.state.theme === 'dark' ? 'wrapper_theme_dark' : ''}`} ref={element => this.wrapperRef = element}>
         <Header>
@@ -223,14 +224,14 @@ class Main extends React.Component<RouteComponentProps<any>, any> {
             </Route>
             <Route exact path="/game">
               <Game
-                {...{ ...this.state, paused: this.pausedHandler, storageService: this.storageService } }
+                {...gameProps }
               />
             </Route>
             <Route exact path="/autoplay">
               <Autoplay storageService={this.storageService} />
             </Route>
             <Route exact path="/settings">
-              <Settings {...{ storageService: this.storageService, updateSettings: this.updateSettingsHandler }} />
+              <Settings {...settingsProps} />
             </Route>
             <Route exact path="/statistics">
               <Statistics storageService={this.storageService} />
