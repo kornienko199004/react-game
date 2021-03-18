@@ -1,0 +1,30 @@
+{
+  "name": "react-game-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "server": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kornienko199004/react-game.git"
+  },
+  "author": " <kornienko199004@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kornienko199004/react-game/issues"
+  },
+  "homepage": "https://github.com/kornienko199004/react-game#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "config": "^3.3.4",
+    "express": "^4.17.1",
+    "mongoose": "^5.11.18"
+  },
+  "devDependencies": {
+    "concurrently": "^6.0.0",
+    "nodemon": "^2.0.7"
+  }
+}

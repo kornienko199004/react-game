@@ -1,0 +1,270 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  min-width: 375px;
+  // height: 100vh;
+  padding-bottom: 77px;
+}
+
+.page {
+  flex-grow: 1;
+  background-color: #fefefe;
+}
+
+.header {
+  width: 100%;
+  background-color: #3f51b5;
+  padding: 0 24px;
+}
+
+.header__inner {
+  width: 100%;
+  height: 57px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #3f51b5;
+  padding: 0 24px;
+}
+
+.footer__inner {
+  width: 100%;
+  height: 57px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.sidebar {
+  height: 100%;
+  background-color: #b0bec5;
+}
+
+.logo__title {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 21px;
+  color: #ffffff;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.logo__description {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+  color: #ffffff;
+  text-align: left;
+}
+
+.logo__title,
+.logo__description {
+  padding: 0;
+  margin: 0;
+}
+
+.rsschool-logo {
+  width: 100px;
+
+  & img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+.feedback {
+  margin-right: 7px;
+  font-size: 14px;
+  line-height: 16px;
+  color: #000000;
+
+  & a {
+    color: #fff;
+    text-decoration: none;
+  }
+}
+
+.menu-button {
+  color: #fff;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: all 300ms;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.navigation__item {
+  padding: 0 !important;
+  height: 45px;
+}
+
+.navigation__link {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  line-height: 16px;
+  color: #ffffff;
+  text-decoration: none;
+
+  &:hover {
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+}
+
+.sidebar__header {
+  margin-bottom: 57px;
+  padding: 13px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.wrapper_theme_dark {
+  background-color: #0d1117;
+
+  & .header,
+    .footer {
+    background-color: #161b22;
+  }
+
+  & .page {
+    background-color: #0d1117;
+    color: #fff;
+  }
+
+  & .game_fullscreen {
+    background-color: #0d1117;
+  }
+
+  & .feedback {
+    color: #3c424a;
+  }
+
+  & .settings__controls {
+
+    & button {
+      color: #c9d1d9;
+      background-color: #21262d;
+    }
+  }
+
+  & .settings__form-control {
+    & label {
+      color: #fff;
+    }
+
+    & .MuiSelect-select:focus {
+      background-color: #fff;
+    }
+  }
+
+  & .card {
+    background-color: #3c424a;
+  }
+}
+
+.game-controls {
+  position: absolute;
+  right: 20px;
+  z-index: 2;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fefefe;
+  border-radius: 5px;
+}
+
+.game-controls__button {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  width: 25px;
+  height: 25px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: transform 300ms;
+
+  & img {
+    width: 100%;
+    height: auto;
+  }
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &:first-child {
+    margin-right: 10px;
+  }
+}
+
+.game-controls__button_mute::before {
+  content: "";
+  position: absolute;
+  top: 40%;
+  left: -5px;
+  display: block;
+  width: 40px;
+  height: 2px;
+  background-color: #000;
+  transform: rotate(45deg);
+  animation: mute 300ms;
+}
+
+@keyframes mute {
+  from {
+    width: 0;
+    top: 0;
+  }
+  50% {
+    width: 20px;
+    top: 20%;
+  }
+  to {
+    width: 40px;
+    top: 40%;
+  }
+}
+
+.statistics-wrapper {
+  padding: 10px 20px;
+}
+
+.MuiListItem-gutters {
+  text-align: center !important;
+}
+
+.breadcrumb-page {
+  text-transform: capitalize;
+}
+
+.breadcrumb-link {
+  cursor: pointer;
+}
+
+.breadcrumbs-wrapper {
+  padding-left: 20px;
+  padding-top: 10px;
+}
